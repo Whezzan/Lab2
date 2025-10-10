@@ -99,7 +99,7 @@ namespace DungeonCrawler
             Glyph = 'r';
             Color = ConsoleColor.Red;
             Name = "Rat";
-            HP = 1;
+            HP = 5;
             AttackDice = new Dice(1, 6, 3, rng);
             DefenceDice = new Dice(1, 6, 1, rng);
         }
@@ -121,7 +121,7 @@ namespace DungeonCrawler
             Glyph = 's';
             Color = ConsoleColor.Green;
             Name = "Snake";
-            HP = 1;
+            HP = 10;
             AttackDice = new Dice(3, 4, 2, rng);
             DefenceDice = new Dice(1, 8, 5, rng);
         }

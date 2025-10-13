@@ -17,7 +17,7 @@ namespace DungeonCrawler
                 string levelPath = @".\\Levels\\Level1.txt";
                 if (!File.Exists(levelPath))
                 {
-                    Console.WriteLine($"Hittar inte {levelPath}. Lägg filen bredvid .exe eller skicka sökväg som första argument.");
+                    Console.WriteLine($"IG!! Programmet hittar inte {levelPath}, jag är fan sämst.");
                     return;
                 }
 

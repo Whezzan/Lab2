@@ -1,6 +1,6 @@
 ﻿
     // -------------------- Dice --------------------
-    public sealed class Dice
+    public class Dice
     {
         private readonly int _num;
         private readonly int _sides;

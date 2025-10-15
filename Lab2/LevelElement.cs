@@ -78,35 +78,51 @@ public sealed class KaffeKopp : LevelElement
 
     public sealed class Snake : Enemy
     {
+        private Random rng; 
+
         public Snake(int x, int y, Random rng)
         {
-            X = x; Y = y;
+            X = x;
+            Y = y;
             Glyph = 's';
             Color = ConsoleColor.Green;
             Name = "Snake";
-            HP = 10;
+            HP = 5;
+
+            this.rng = rng; 
+
             AttackDice = new Dice(3, 4, 2, rng);
             DefenceDice = new Dice(1, 8, 5, rng);
         }
 
         public override void Update(Game game)
         {
+           
+            if (rng.NextDouble() < 0.15)
+                return;
+
             var p = game.Player;
             int dist2 = (p.X - X) * (p.X - X) + (p.Y - Y) * (p.Y - Y);
             if (dist2 > 2 * 2) return;
 
             var candidates = new (int dx, int dy)[] { (0, -1), (0, 1), (-1, 0), (1, 0) };
             int bestX = X, bestY = Y, best = dist2;
+
             foreach (var (dx, dy) in candidates)
             {
-                int nx = X + dx, ny = Y + dy;
+                int nx = X + dx;
+                int ny = Y + dy;
                 if (game.IsBlocked(nx, ny)) continue;
+
                 int d2 = (p.X - nx) * (p.X - nx) + (p.Y - ny) * (p.Y - ny);
                 if (d2 > best)
                 {
-                    best = d2; bestX = nx; bestY = ny;
+                    best = d2;
+                    bestX = nx;
+                    bestY = ny;
                 }
             }
+
             game.TryMoveEnemy(this, bestX, bestY);
         }
     }

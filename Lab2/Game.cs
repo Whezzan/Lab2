@@ -14,6 +14,11 @@ public sealed class Game
 
     private SoundPlayer _musicPlayer;
 
+    private char[,] _frontBuffer;
+    private char[,] _backBuffer;
+    private ConsoleColor[,] _frontColor;
+    private ConsoleColor[,] _backColor;
+
     public void Run(string levelFile)
     {
         Console.CursorVisible = false;
@@ -21,6 +26,12 @@ public sealed class Game
         ShowTitleScreen();
 
         Level.Load(levelFile, Rng);
+
+        _frontBuffer = new char[Level.Width, Level.Height];
+        _backBuffer = new char[Level.Width, Level.Height];
+        _frontColor = new ConsoleColor[Level.Width, Level.Height];
+        _backColor = new ConsoleColor[Level.Width, Level.Height];
+
         Player = new Player(Level.PlayerStart.x, Level.PlayerStart.y, Rng);
 
         try
@@ -248,7 +259,15 @@ public sealed class Game
 
     private void Render()
     {
-        Console.SetCursorPosition(0, 0);
+        for (int y = 0; y < Level.Height; y++)
+        {
+            for (int x = 0; x < Level.Width; x++)
+            {
+                _backBuffer[x, y] = ' ';
+                _backColor[x, y] = ConsoleColor.Black;
+            }
+        }
+
         int r2 = VisionRadius * VisionRadius;
 
         foreach (var w in Level.Walls)
@@ -259,18 +278,10 @@ public sealed class Game
                 _discoveredWalls.Add((w.X, w.Y));
         }
 
-        for (int y = 0; y < Level.Height; y++)
-        {
-            Console.SetCursorPosition(0, y);
-            Console.Write(new string(' ', Level.Width));
-        }
-
         foreach (var pos in _discoveredWalls)
         {
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.SetCursorPosition(pos.x, pos.y);
-            Console.Write('#');
-            Console.ResetColor();
+            _backBuffer[pos.x, pos.y] = '#';
+            _backColor[pos.x, pos.y] = ConsoleColor.DarkGray;
         }
 
         foreach (var e in Level.Enemies)
@@ -278,17 +289,42 @@ public sealed class Game
             int dx = e.X - Player.X;
             int dy = e.Y - Player.Y;
             if (dx * dx + dy * dy <= r2)
-                e.Draw();
+            {
+                _backBuffer[e.X, e.Y] = e.Glyph;
+                _backColor[e.X, e.Y] = e.Color;
+            }
         }
+
         foreach (var p in Level.Potions)
         {
             int dx = p.X - Player.X;
             int dy = p.Y - Player.Y;
             if (dx * dx + dy * dy <= r2)
-                p.Draw();
+            {
+                _backBuffer[p.X, p.Y] = p.Glyph;
+                _backColor[p.X, p.Y] = p.Color;
+            }
         }
 
-        Player.Draw();
+        _backBuffer[Player.X, Player.Y] = Player.Glyph;
+        _backColor[Player.X, Player.Y] = Player.Color;
+
+        for (int y = 0; y < Level.Height; y++)
+        {
+            for (int x = 0; x < Level.Width; x++)
+            {
+                if (_frontBuffer[x, y] != _backBuffer[x, y] || _frontColor[x, y] != _backColor[x, y])
+                {
+                    Console.SetCursorPosition(x, y);
+                    Console.ForegroundColor = _backColor[x, y];
+                    Console.Write(_backBuffer[x, y]);
+                    _frontBuffer[x, y] = _backBuffer[x, y];
+                    _frontColor[x, y] = _backColor[x, y];
+                }
+            }
+        }
+
+        Console.ResetColor();
 
         Console.SetCursorPosition(0, Level.Height);
         Console.ForegroundColor = ConsoleColor.White;
@@ -373,7 +409,7 @@ public sealed class Game
         Console.WriteLine(gameOverArt);
         Console.ResetColor();
 
-        int midX = Math.Max(0, (Console.WindowWidth / 2) - 15);
+        int midX = Math.Max(0, (Console.WindowWidth / 2) - 90);
         Console.SetCursorPosition(midX, Console.CursorTop);
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine($"GAME OVER — Du dödade {_kills} fiender!");
@@ -454,7 +490,7 @@ public sealed class Game
         Console.WriteLine(winArt);
         Console.ResetColor();
 
-        int midX = Math.Max(0, (Console.WindowWidth / 2) - 15);
+        int midX = Math.Max(0, (Console.WindowWidth / 2) - 90);
         Console.SetCursorPosition(midX, Console.CursorTop);
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine($"DU VANN! Du rensade dungeonen med {_kills} dödade fiender!");

@@ -137,7 +137,7 @@ public sealed class KaffeKopp : LevelElement
             Name = "Player";
             HP = 100;
             AttackDice = new Dice(2, 6, 2, rng);
-            DefenceDice = new Dice(2, 6, 4, rng);
+            DefenceDice = new Dice(2, 6, 1, rng);
         }
     }
 }

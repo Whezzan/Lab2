@@ -1,5 +1,5 @@
 ﻿// -------------------- LevelData --------------------
-using static HealthPotion;
+using static KaffeKopp;
 
 public sealed class LevelData
 {
@@ -7,7 +7,7 @@ public sealed class LevelData
     public IReadOnlyList<LevelElement> Elements => _elements;
     public readonly List<Wall> Walls = new();
     public readonly List<Enemy> Enemies = new();
-    public readonly List<HealthPotion> Potions = new();
+    public readonly List<KaffeKopp> Potions = new();
     public (int x, int y) PlayerStart;
     public int Width { get; private set; }
     public int Height { get; private set; }
@@ -43,7 +43,7 @@ public sealed class LevelData
                         PlayerStart = (x, y);
                         break;
                     case 'K':
-                        var h = new HealthPotion(x, y);
+                        var h = new KaffeKopp(x, y);
                         Potions.Add(h);
                         _elements.Add(h);
                         break;

@@ -1,6 +1,6 @@
 ﻿// -------------------- Game --------------------
 
-using static HealthPotion;
+using static KaffeKopp;
 using System.Media;
 
 public sealed class Game
@@ -139,16 +139,15 @@ public sealed class Game
 "            |                                |\r\n" +
 "            |________________________________|";
 
-        // Fade in rad för rad
+        
         foreach (var line in title.Split('\n'))
         {
             Console.WriteLine(line);
-            Thread.Sleep(25); // kort delay
+            Thread.Sleep(25); 
         }
 
-        // Blinkande "PRESS ANY KEY"
         int cursorLeft = 13;
-        int cursorTop = Console.CursorTop - 3; // raden där texten är
+        int cursorTop = Console.CursorTop - 3; 
         bool visible = true;
 
         while (!Console.KeyAvailable)
@@ -374,7 +373,6 @@ public sealed class Game
         Console.WriteLine(gameOverArt);
         Console.ResetColor();
 
-        // Centrera kill-raden under bilden
         int midX = Math.Max(0, (Console.WindowWidth / 2) - 15);
         Console.SetCursorPosition(midX, Console.CursorTop);
         Console.ForegroundColor = ConsoleColor.Yellow;

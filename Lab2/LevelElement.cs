@@ -27,11 +27,11 @@ public sealed class Wall : LevelElement
     }
 }
 
-public sealed class HealthPotion : LevelElement
+public sealed class KaffeKopp : LevelElement
 {
     public int HealAmount { get; } = 10;
 
-    public HealthPotion(int x, int y)
+    public KaffeKopp(int x, int y)
     {
         X = x;
         Y = y;

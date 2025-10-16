@@ -328,7 +328,7 @@ public sealed class Game
 
         Console.SetCursorPosition(0, Level.Height);
         Console.ForegroundColor = ConsoleColor.White;
-        Console.Write($"HP: {Math.Max(0, Player.HP)}  | Attack {Player.AttackDice}  Defence {Player.DefenceDice}  | Kills: {_kills}   ");
+        Console.Write($"HP: {Math.Max(0, Player.HP)}  | Attack {Player.AttackDice}  Försvar {Player.DefenceDice}  | Kills: {_kills}   ");
         Console.ResetColor();
     }
 
